@@ -1,0 +1,68 @@
+-- Create the database
+CREATE DATABASE pi_logistics;
+USE pi_logistics;
+
+-- Users Table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Bookings Table
+CREATE TABLE bookings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    cargo_description VARCHAR(255) NOT NULL,
+    source VARCHAR(100) NOT NULL,
+    distance DECIMAL(10, 2) DEFAULT NULL,
+    cost DECIMAL(10, 2) DEFAULT NULL,
+    pickup VARCHAR(100) NOT NULL,
+    destination VARCHAR(100) NOT NULL,
+    date_of_transport DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE cashiers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    cashier_id VARCHAR(10) UNIQUE NOT NULL,
+    bank_account VARCHAR(20),
+    phone VARCHAR(15),
+    email VARCHAR(50),
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE tuktuks (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    type ENUM('Tuk Tuk Loader', 'Tuk Tuk Tipper', 'Tuk Tuk Cabin') NOT NULL,
+    number_plate VARCHAR(10) UNIQUE NOT NULL,
+    assigned_driver VARCHAR(50),
+    description TEXT
+);
+
+CREATE TABLE logs (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    activity VARCHAR(255),
+    cashier_id INT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cashier_id) REFERENCES cashiers(id)
+);
+
+CREATE TABLE admins (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO admins (username, password, email)
+VALUES ('admin', '123', 'harrisonwekesa09@gmail.com');
