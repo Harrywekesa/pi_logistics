@@ -95,10 +95,11 @@ try {
     <input type="number" name="cashier_id" placeholder="cashier_id" required>
     <input type="text" name="phone" placeholder="Phone">
     <input type="email" name="email" placeholder="Email">
-    <button type="submit" name="add_cashier">Add Cashier</button>
+    <button type="submit" name="add_cashier" class="btn-add">Add Cashier</button>
 </form>
 </div>
 <!-- Cashiers List -->
+<div class = "section">
 <h2>Cashiers List</h2>
 <table>
     <tr><th>ID</th><th>Username</th><th>Email</th><th>Actions</th></tr>
@@ -120,5 +121,6 @@ try {
     </tr>
     <?php endforeach; ?>
 </table>
+</div>
 </body>
 </html>

@@ -66,3 +66,20 @@ CREATE TABLE admins (
 
 INSERT INTO admins (username, password, email)
 VALUES ('admin', '123', 'harrisonwekesa09@gmail.com');
+
+-- Create the fleet table with registration_number as the primary key
+CREATE TABLE IF NOT EXISTS fleet (
+    registration_number VARCHAR(20) PRIMARY KEY,  -- This now serves as the vehicle_id
+    vehicle_type ENUM('Loader', 'Tipper', 'Cabin') NOT NULL,
+    capacity INT NOT NULL,
+    mileage INT NOT NULL,
+    driver_id INT,
+    is_active BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (driver_id) REFERENCES drivers(driver_id)
+);
+
+-- Insert sample data into the fleet table
+INSERT INTO fleet (registration_number, vehicle_type, capacity, mileage, driver_id, is_active) VALUES
+('KTBD123A', 'Loader', 1000, 5000, 1, TRUE),
+('KTBD456B', 'Tipper', 1500, 3000, 2, TRUE),
+('KTBD789C', 'Cabin', 1200, 4000, 3, TRUE);

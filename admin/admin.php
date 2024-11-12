@@ -88,7 +88,7 @@ $tuktuks = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </ul>
         </nav>
     </header>
-    <h1>Admin Dashboard</h1>
+   <!-- <h1>Admin Dashboard</h1>
     <div class="section">
     <h2>Manage Cashiers</h2>
     <form method="POST" class="form-group">
@@ -146,6 +146,6 @@ $tuktuks = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <td><?= htmlspecialchars($tuktuk['assigned_driver']) ?></td>
         </tr>
         <?php endforeach; ?>
-    </table>
+    </table>-->
 </body>
 </html>

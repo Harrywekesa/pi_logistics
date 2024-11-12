@@ -63,6 +63,7 @@ $drivers = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </ul>
         </nav>
     </header>
+    <div class="section">
     <h1>Manage Drivers</h1>
 
     <!-- Add Driver Form -->
@@ -73,10 +74,11 @@ $drivers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <input type="email" name="email" placeholder="Email" required>
         <input type="text" name="phone" placeholder="Phone" required>
         <input type="text" name="assigned_tuktuk" placeholder="Assigned Tuktuk">
-        <button type="submit" name="add_driver">Add Driver</button>
+        <button type="submit" name="add_driver" class="btn-add">Add Driver</button>
     </form>
-
+    </div>
     <!-- Drivers List -->
+    <div class="section">
     <h2>Drivers List</h2>
     <table>
         <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Assigned Tuktuk</th><th>Status</th><th>Actions</th></tr>
@@ -105,8 +107,9 @@ $drivers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </tr>
         <?php endforeach; ?>
     </table>
-
+    </div>
     <!-- Generate Driver Report -->
+    <div class="section">
     <h2>Generate Report for Driver</h2>
     <form method="GET" action="generate_report.php">
         <select name="driver_id" required>
@@ -116,5 +119,6 @@ $drivers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </select>
         <button type="submit">Generate Report</button>
     </form>
+    </div>
 </body>
 </html>
