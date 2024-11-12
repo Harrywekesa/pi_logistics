@@ -142,4 +142,7 @@ try {
     </table>
 </div>
 </body>
+<footer>
+        <p>&copy; 2024 Pi Logistics. All rights reserved.</p>
+    </footer>
 </html>
