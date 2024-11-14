@@ -1,16 +1,17 @@
 <?php
 session_start();
-require 'db.php';
-require 'vendor/autoload.php';
+require '../db.php';
+require '../vendor/autoload.php'; // Ensure autoload.php path is correct
 
-use Spipu\Html2Pdf\Html2Pdf;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['booking_id'])) {
     $booking_id = $_POST['booking_id'];
     $cashier_name = $_SESSION['cashier_name'];
 
     // Fetch booking and client details
-    $stmt = $conn->prepare("SELECT bookings.*, clients.name AS client_name, clients.contact_number, clients.address 
+    $stmt = $conn->prepare("SELECT bookings.*, clients.name AS client_name, clients.contact_number 
                             FROM bookings 
                             JOIN clients ON bookings.client_id = clients.client_id 
                             WHERE booking_id = :booking_id");
