@@ -80,6 +80,8 @@ CREATE TABLE IF NOT EXISTS fleet (
 
 -- Insert sample data into the fleet table
 INSERT INTO fleet (registration_number, vehicle_type, capacity, mileage, driver_id, is_active) VALUES
-('KTBD123A', 'Loader', 1000, 5000, 1, TRUE),
+('KTBD123A', 'Loader', 1000, 5000, 1, TRUE);
 ('KTBD456B', 'Tipper', 1500, 3000, 2, TRUE),
 ('KTBD789C', 'Cabin', 1200, 4000, 3, TRUE);
+
+mysqldump -u root -p pi_logistics > pi_logistics.sql

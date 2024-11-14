@@ -230,9 +230,9 @@ body {
 /* Marquee Styles */
 .marquee {
     position: absolute;
-    top: 0;
+    bottom: 0; /* Position it at the bottom of the viewport */
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    background-color: transparent; /* Set background to fully transparent */
     color: #fff;
     padding: 10px 0;
     text-align: center;
@@ -246,15 +246,16 @@ body {
 
 @keyframes scroll-text {
     0% {
-        transform: translateX(100%);
+        transform: translateY(100%); /* Start from below the screen */
     }
     100% {
-        transform: translateX(-100%);
+        transform: translateY(-100%); /* Move upwards and disappear above the viewport */
     }
 }
 
+
 /* Navbar Styles */
-.navbar {
+/* .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -262,9 +263,9 @@ body {
     padding: 15px;
     position: relative;
     z-index: 2;
-}
+} */
 
-.navbar .logo a {
+/* .navbar .logo a {
     color: white;
     text-decoration: none;
     font-size: 24px;
@@ -287,7 +288,7 @@ body {
 
 .nav-links li a:hover {
     text-decoration: underline;
-}
+} */
 
 /* Content Styles */
 .content {

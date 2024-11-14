@@ -14,20 +14,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_cashier'])) {
     $username = $_POST['username'];
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
     $cashier_id = $_POST['cashier_id'];
-    $bank_account = $_POST['bank_account'];
+    $name = $_POST['name'];
     $phone = $_POST['phone'];
     $email = $_POST['email'];
 
     try {
         // Prepare the SQL query to insert data into the cashiers table
-        $stmt = $conn->prepare("INSERT INTO cashiers (username, password, cashier_id, bank_account, phone, email) 
-                                VALUES (:username, :password, :cashier_id, :bank_account, :phone, :email)");
+        $stmt = $conn->prepare("INSERT INTO cashiers (name, username, password, cashier_id, phone, email) 
+                                VALUES (:name, :username, :password, :cashier_id, :phone, :email)");
         
         // Bind the parameters to the placeholders in the SQL query
+        $stmt->bindParam(':name', $name);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $password);
         $stmt->bindParam(':cashier_id', $cashier_id);
-        $stmt->bindParam(':bank_account', $bank_account);
         $stmt->bindParam(':phone', $phone);
         $stmt->bindParam(':email', $email);
 
@@ -47,6 +47,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['suspend_cashier'])) {
     $cashier_id = $_POST['cashier_id'];
     try {
         $stmt = $conn->prepare("UPDATE cashiers SET is_active = FALSE WHERE cashier_id = :cashier_id");
+        $stmt->bindParam(':cashier_id', $cashier_id);
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//Unsuspend Cashier
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['unsuspend_cashier'])) {
+    $cashier_id = $_POST['cashier_id'];
+    try {
+        $stmt = $conn->prepare("UPDATE cashiers SET is_active = TRUE WHERE cashier_id = :cashier_id");
         $stmt->bindParam(':cashier_id', $cashier_id);
         $stmt->execute();
     } catch (PDOException $e) {
@@ -78,7 +90,7 @@ try {
         </div>
         <ul class="nav-links">
             <li><a href="admin.php">Admin Dashboard</a></li>
-            <li><a href="manage_fleet.php">Manage Fleet</a></li>
+            <li><a href="manage_tuktuks.php">Manage Tuktuks</a></li>
             <li><a href="manage_drivers.php">Manage Drivers</a></li>
             <li><a href="../logout.php" class="login-btn">Logout</a></li>
         </ul>
@@ -91,7 +103,7 @@ try {
 <form method="POST" class="form-group">
     <input type="text" name="username" placeholder="Username" required>
     <input type="password" name="password" placeholder="Password" required>
-    <input type="text" name="bank_account" placeholder="Bank Account">
+    <input type="text" name="name" placeholder="Cashier Name">
     <input type="number" name="cashier_id" placeholder="cashier_id" required>
     <input type="text" name="phone" placeholder="Phone">
     <input type="email" name="email" placeholder="Email">
@@ -115,6 +127,10 @@ try {
                     <button type="submit" name="suspend_cashier">Suspend</button>
                 </form>
             <?php else: ?>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="cashier_id" value="<?= $cashier['cashier_id'] ?>">
+                    <button type="submit" name="unsuspend_cashier">Unsuspend</button>
+                </form>
                 Suspended
             <?php endif; ?>
         </td>

@@ -1,13 +1,13 @@
+<!-- index.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Welcome to Pi Logistics</title>
     <link rel="stylesheet" href="../styles/style.css"> <!-- Link to external CSS file -->
 </head>
 <body>
-
     <!-- Video Background -->
     <div class="video-wrapper">
         <video class="video-background" autoplay muted loop>
@@ -16,32 +16,32 @@
         </video>
     </div>
 
+    <!-- Navigation Bar -->
     <header>
         <nav class="navbar">
             <div class="logo">
                 <a href="index.php">Pi Logistics</a>
             </div>
             <ul class="nav-links">
-                <li><a href="admin.php">Admin Dashboard</a></li>
-                <li><a href="manage_cashiers.php">Manage Cashiers</a></li>
-                <li><a href="manage_tuktuks.php">Manage Tuktuks</a></li>
-                <li><a href="manage_drivers.php">Manage Drivers</a></li>
-                <li><a href="../logout.php" class="login-btn">Logout</a></li>
+                <li><a href="cashier.php">Cashier's Dashboard</a></li>
+                <li><a href="login.php" class="login-btn">Login</a></li>
             </ul>
         </nav>
     </header>
+
+    <!-- Main Content -->
+    <main>
+    <div class="marquee">
+        
+            <h1>Welcome to Pi Logistics</h1>
+            <p>Welcome to the Pi Logistics cashiers’s page. We provide efficient, safe, and reliable transportation solutions tailored to meet client needs. Whether for one-time rides or regular transport, Pi Logistics ensures your journey is comfortable and secure.</p>
     
-    <div class="content">
-        <!-- Admin Dashboard Content -->
-        <h1>Welcome to the Admin Dashboard</h1>
-        <p>Welcome to Pi Logistics – Your trusted partner for efficient transportation and tuktuks management!</p>
-        <!-- Add your admin-specific content here -->
-    </div>
+</div>
+    </main>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Pi Logistics. All rights reserved.</p>
+        <p>&copy; <?= date("Y"); ?> Pi Logistics. All rights reserved.</p>
     </footer>
-
 </body>
 </html>

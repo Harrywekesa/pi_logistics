@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="../styles/style.css"> <!-- Link to external CSS file -->
 </head>
 <body>
+<!-- Video Background -->
+<div class="video-wrapper">
+        <video class="video-background" autoplay muted loop>
+            <source src="../videos/Bomba1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
     <!-- Navigation Bar -->
     <header>
         <nav class="navbar">
@@ -23,10 +30,12 @@
 
     <!-- Main Content -->
     <main>
-        <section class="welcome-section">
+    <div class="marquee">
+        <!-- <section class="welcome-section"> -->
             <h1>Welcome to Pi Logistics</h1>
             <p>Welcome to the Pi Logistics administrator’s page. We provide efficient, safe, and reliable transportation solutions tailored to meet client needs. Whether for one-time rides or regular transport, Pi Logistics ensures your journey is comfortable and secure.</p>
-        </section>
+        <!-- </section> -->
+    </div>
     </main>
 
     <!-- Footer -->

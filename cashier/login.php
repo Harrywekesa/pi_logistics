@@ -1,22 +1,22 @@
+<!-- login.php -->
 <?php
 session_start();
-require 'db.php'; // Ensure this file contains the correct database connection setup
+require 'db.php'; // Include database connection
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Prepare the SQL statement to prevent SQL injection
-    $stmt = $conn->prepare("SELECT * FROM admins WHERE username = :username");
+    // Check credentials
+    $stmt = $conn->prepare("SELECT * FROM cashiers WHERE username = :username");
     $stmt->execute(['username' => $username]);
-    $admin = $stmt->fetch();
+    $user = $stmt->fetch();
 
-    // Check if user exists and password is correct
-    if ($admin && password_verify($password, $admin['password'])) {
+    if ($user && password_verify($password, $user['password'])) {
         $_SESSION['loggedin'] = true;
-        $_SESSION['admin_id'] = $admin['admin_id'];
-        $_SESSION['username'] = $admin['username'];
-        header('Location: admin.php');
+        $_SESSION['cashier_id'] = $user['cashier_id'];
+        $_SESSION['username'] = $user['username'];
+        header('Location: cashier.php');
         exit;
     } else {
         $error = "Invalid username or password";
@@ -28,14 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Login</title>
+    <title>Login</title>
     <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body>
+
     <main class="login-container">
-        <h2>Admin Login</h2>
+        <h2>Login</h2>
         <?php if (!empty($error)) : ?>
-            <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
+            <p class="error-message"><?php echo $error; ?></p>
         <?php endif; ?>
         <form action="login.php" method="post">
             <label for="username">Username:</label>
@@ -46,6 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             <button type="submit">Login</button>
         </form>
+        <p>Don't have an account? <a href="register.php">Register</a></p>
     </main>
+    <footer>
+        <p>&copy; <?= date("Y"); ?> Pi Logistics. All rights reserved.</p>
+    </footer>
 </body>
+
 </html>
