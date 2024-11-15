@@ -1,17 +1,14 @@
 <?php
 session_start();
 require '../db.php';
-require '../vendor/autoload.php'; // Ensure autoload.php path is correct
-
-use Dompdf\Dompdf;
-use Dompdf\Options;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['booking_id'])) {
     $booking_id = $_POST['booking_id'];
-    $cashier_name = $_SESSION['cashier_name'];
+    $cashier_id = $_SESSION['cashier_id'];
 
     // Fetch booking and client details
-    $stmt = $conn->prepare("SELECT bookings.*, clients.name AS client_name, clients.contact_number 
+    $stmt = $conn->prepare("SELECT bookings.*, clients.name AS client_name, clients.contact_number, 
+                            clients.address 
                             FROM bookings 
                             JOIN clients ON bookings.client_id = clients.client_id 
                             WHERE booking_id = :booking_id");
@@ -20,6 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['booking_id'])) {
     $booking = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($booking) {
+        // Fetch cashier's name using cashier_id from session
+        $stmt_cashier = $conn->prepare("SELECT name FROM cashiers WHERE cashier_id = :cashier_id");
+        $stmt_cashier->bindParam(':cashier_id', $cashier_id, PDO::PARAM_INT);
+        $stmt_cashier->execute();
+        $cashier = $stmt_cashier->fetch(PDO::FETCH_ASSOC);
+        $cashier_name = $cashier ? $cashier['name'] : 'Unknown Cashier';  // Default if cashier not found
+
         ob_start();
         ?>
         <html>
@@ -27,48 +31,72 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['booking_id'])) {
             <style>
                 body {
                     font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
                     color: #333;
                 }
                 .invoice-container {
+                    width: 100%;
+                    max-width: 700px;
+                    margin: 0 auto;
                     padding: 20px;
-                    background-color: #f9f9f9;
-                    border: 1px solid #ddd;
-                    border-radius: 8px;
-                    width: 90%;
-                    margin: auto;
+                    background-color: #ffffff;
+                    border: 5px solid #0066cc;
+                    border-radius: 10px;
+                    box-sizing: border-box;
                 }
-                .invoice-header, .invoice-footer {
+                /* Print styles */
+                @media print {
+                    .print-button {
+                        display: none;
+                    }
+                }
+                .invoice-header {
                     text-align: center;
                     margin-bottom: 20px;
                 }
-                .invoice-header h2 {
+                .invoice-header h1 {
+                    font-size: 32px;
                     color: #0066cc;
-                    font-size: 24px;
                 }
                 .invoice-body {
-                    margin: 15px 0;
+                    font-size: 14px;
                 }
                 .invoice-body table {
                     width: 100%;
                     border-collapse: collapse;
-                    margin: 10px 0;
+                    margin-bottom: 20px;
                 }
-                .invoice-body table, .invoice-body th, .invoice-body td {
-                    border: 1px solid #ddd;
+                .invoice-body th, .invoice-body td {
                     padding: 8px;
+                    border: 1px solid #ddd;
                     text-align: left;
                 }
                 .invoice-body th {
-                    background-color: #333;
+                    background-color: #0066cc;
                     color: white;
+                }
+                .invoice-footer {
+                    text-align: center;
+                    margin-top: 20px;
+                }
+                .print-button {
+                    display: inline-block;
+                    margin-top: 20px;
+                    padding: 10px 20px;
+                    color: white;
+                    background-color: #28a745;
+                    border-radius: 5px;
+                    cursor: pointer;
                 }
             </style>
         </head>
         <body>
             <div class="invoice-container">
                 <div class="invoice-header">
+                    <h1>BAMBOO LOGISTICS</h1>
                     <h2>Invoice</h2>
-                    <p>Booking ID: <?= htmlspecialchars($booking['booking_id']) ?></p>
+                    <p><strong>Invoice No:</strong> INV-<?= htmlspecialchars($booking['booking_id']) ?></p>
+                    <p><strong>Date:</strong> <?= date("Y-m-d") ?></p>
                 </div>
                 <div class="invoice-body">
                     <table>
@@ -80,24 +108,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['booking_id'])) {
                         <tr><th>Source</th><td><?= htmlspecialchars($booking['source']) ?></td></tr>
                         <tr><th>Destination</th><td><?= htmlspecialchars($booking['destination']) ?></td></tr>
                         <tr><th>Distance (km)</th><td><?= htmlspecialchars($booking['distance']) ?></td></tr>
-                        <tr><th>Total Cost</th><td><?= htmlspecialchars($booking['cost']) ?> USD</td></tr>
-                        <tr><th>Cashier</th><td><?= htmlspecialchars($cashier_name) ?></td></tr>
+                        <tr><th>Total Cost</th><td>Ksh.<?= htmlspecialchars($booking['cost']) ?></td></tr>
+                        <tr><th>Payment Status</th><td><?= htmlspecialchars($booking['']) ?></td></tr>
+                        <tr><th>Delivery Status</th><td><?= htmlspecialchars($booking['status']) ?></td></tr>
+                        <tr><th>Cashier</th><td>Served by: <?= htmlspecialchars($cashier_name) ?></td></tr>
                     </table>
                 </div>
                 <div class="invoice-footer">
-                    <p>Date: <?= date("Y-m-d") ?></p>
-                    <p>Thank you for your business!</p>
+                    <p>Payment Terms: Please make payment within 15 days.</p>
+                    <p><strong>Thank you for your business!</strong></p>
                 </div>
+            </div>
+            <div class="invoice-footer" style="text-align: center; margin-top: 30px;">
+                <button onclick="window.print()" class="print-button">Print Invoice</button>
             </div>
         </body>
         </html>
         <?php
-        $html = ob_get_clean();
-
-        // Generate PDF
-        $pdf = new Html2Pdf();
-        $pdf->writeHTML($html);
-        $pdf->output('invoice.pdf');
+        ob_end_flush();
     } else {
         echo "Error: Booking not found.";
     }
